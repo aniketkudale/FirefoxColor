@@ -65,8 +65,11 @@
 .doll--large {
   @include unit('large');
 
+  display: grid;
+  grid-template-rows: $grid * 20 $grid * 19 1fr;
+  height: 100%;
+
   > .doll__tabbar {
-    flex: 0 0 $grid * 20;
     padding: 0 $grid * 12.5;
 
     li {
@@ -84,10 +87,9 @@
 
   > .doll__toolbar-wrapper {
     background-position-y: -80px;
-    flex: 0 0 $grid * 19;
 
     .doll__toolbar {
-      height: 96px;
+      height: $grid * 19;
       padding: 0 $grid * 2.5 0 $grid * 6.5;
     }
 

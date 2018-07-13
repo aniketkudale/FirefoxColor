@@ -2,20 +2,17 @@ import React, { Fragment } from "react";
 import { connect } from "react-redux";
 
 import { actions, selectors } from "../../../../lib/store";
-import { DEBUG } from "../../../../lib/utils";
 
 import AppBackground from "../AppBackground";
 import AppFooter from "../AppFooter";
 import AppHeader from "../AppHeader";
 import AppLoadingIndicator from "../AppLoadingIndicator";
 import Mobile from "../Mobile";
-import PresetThemeSelector from "../PresetThemeSelector";
-import SavedThemeSelector from "../SavedThemeSelector";
 import SharedThemeDialog from "../SharedThemeDialog";
 import TermsPrivacyModal from "../TermsPrivacyModal";
 import ThemeBuilder from "../ThemeBuilder";
-import ThemeLogger from "../ThemeLogger";
 import Onboarding from "../Onboarding";
+import ThemeBuilderNext from "../ThemeBuilderNext";
 
 import "./index.scss";
 
@@ -30,14 +27,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setBackground: args => dispatch({
-    ...actions.theme.setBackground(args),
-    meta: { userEdit: true }
-  }),
-  setColor: args => dispatch({
-    ...actions.theme.setColor(args),
-    meta: { userEdit: true }
-  }),
+  setBackground: args =>
+    dispatch({
+      ...actions.theme.setBackground(args),
+      meta: { userEdit: true }
+    }),
+  setColor: args =>
+    dispatch({
+      ...actions.theme.setColor(args),
+      meta: { userEdit: true }
+    }),
   setTheme: args =>
     dispatch({
       ...actions.theme.setTheme(args),
@@ -47,6 +46,7 @@ const mapDispatchToProps = dispatch => ({
   setSelectedColor: args => dispatch(actions.ui.setSelectedColor(args)),
   setSavedThemesPage: page => dispatch(actions.ui.setSavedThemesPage({ page })),
   setDisplayLegalModal: args => dispatch(actions.ui.setDisplayLegalModal(args)),
+  setThemeBuilderPanel: args => dispatch(actions.ui.setThemeBuilderPanel(args)),
   undo: () => dispatch(actions.theme.undo()),
   redo: () => dispatch(actions.theme.redo())
 });
@@ -82,7 +82,9 @@ export const AppComponent = ({
   redo,
   storage,
   userHasEdited,
-  modifiedSinceSave
+  modifiedSinceSave,
+  themeBuilderPanel,
+  setThemeBuilderPanel
 }) => (
   <Fragment>
     {isMobile && <Mobile />}
@@ -91,7 +93,13 @@ export const AppComponent = ({
     {!isMobile &&
       loaderDelayExpired && (
         <Fragment>
-          <AppHeader {...{ hasExtension, theme }} />
+          <AppHeader {...{
+            hasExtension,
+            theme,
+            userHasEdited,
+            modifiedSinceSave,
+            storage,
+            savedThemes }} />
           <div className="app">
             {hasExtension &&
               shouldOfferPendingTheme && (
@@ -128,18 +136,23 @@ export const AppComponent = ({
                   addonUrl
                 }}
               />
-              {hasSavedThemes && (
-                <SavedThemeSelector
-                  {...{
-                    setTheme,
-                    savedThemes,
-                    savedThemesPage,
-                    setSavedThemesPage,
-                    deleteTheme: storage.deleteTheme
-                  }}
-                />
-              )}
-              <PresetThemeSelector {...{ setTheme }} />
+              <ThemeBuilderNext
+                {...{
+                  theme,
+                  setTheme,
+                  savedThemes,
+                  savedThemesPage,
+                  setSavedThemesPage,
+                  hasSavedThemes,
+                  storage,
+                  themeBuilderPanel,
+                  setThemeBuilderPanel,
+                  setBackground,
+                  selectedColor,
+                  setColor,
+                  setSelectedColor
+                }}
+              />
             </main>
             <AppFooter {...{ hasExtension, setDisplayLegalModal }} />
             <TermsPrivacyModal
@@ -149,11 +162,13 @@ export const AppComponent = ({
               }}
             />
             {firstRun && <Onboarding />}
-            <ThemeLogger {...{ theme }} debug={DEBUG} />
           </div>
         </Fragment>
       )}
   </Fragment>
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppComponent);

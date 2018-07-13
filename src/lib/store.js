@@ -29,7 +29,8 @@ export const actions = {
     "SET_SAVED_THEMES",
     "SET_SAVED_THEMES_PAGE",
     "SET_CURRENT_SAVED_THEME",
-    "SET_DISPLAY_LEGAL_MODAL"
+    "SET_DISPLAY_LEGAL_MODAL",
+    "SET_THEME_BUILDER_PANEL"
   ),
   theme: {
     ...createActions({}, "SET_THEME", "SET_COLOR", "SET_BACKGROUND"),
@@ -42,6 +43,7 @@ export const actions = {
 
 export const selectors = {
   hasExtension: state => state.ui.hasExtension,
+  themeBuilderPanel: state => state.ui.themeBuilderPanel,
   firstRun: state => state.ui.firstRun,
   loaderDelayExpired: state => state.ui.loaderDelayExpired,
   selectedColor: state => state.ui.selectedColor,
@@ -86,6 +88,12 @@ export const reducers = {
           {}
         )
       }),
+      SET_THEME_BUILDER_PANEL: (state, { payload }) => {
+        return ({
+          ...state,
+          themeBuilderPanel: payload
+        });
+      },
       SET_SAVED_THEMES_PAGE: (
         state,
         { payload: { page: savedThemesPage } }
@@ -129,7 +137,8 @@ export const reducers = {
       selectedColor: null,
       hasExtension: false,
       loaderDelayExpired: false,
-      displayLegalModal: false
+      displayLegalModal: false,
+      themeBuilderPanel: 0
     }
   ),
   theme: undoable(
@@ -150,7 +159,8 @@ export const reducers = {
         })
       },
       normalizeTheme()
-    ), {
+    ),
+    {
       // Only track explicit user edits in undo/redo history, theme changes
       // from add-on and ?theme are applied but skip the buffer
       syncFilter: true,
