@@ -1,0 +1,8 @@
+@import '../../common.scss';
+
+.ideas button {
+  @include button;
+  @include buttonDefault;
+  width: 100%;
+  margin: 0 0 20px 0;
+}

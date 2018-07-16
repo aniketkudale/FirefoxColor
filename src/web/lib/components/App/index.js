@@ -30,14 +30,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setBackground: args => dispatch({
-    ...actions.theme.setBackground(args),
-    meta: { userEdit: true }
-  }),
-  setColor: args => dispatch({
-    ...actions.theme.setColor(args),
-    meta: { userEdit: true }
-  }),
+  setBackground: args =>
+    dispatch({
+      ...actions.theme.setBackground(args),
+      meta: { userEdit: true }
+    }),
+  setColor: args =>
+    dispatch({
+      ...actions.theme.setColor(args),
+      meta: { userEdit: true }
+    }),
   setTheme: args =>
     dispatch({
       ...actions.theme.setTheme(args),
@@ -125,7 +127,8 @@ export const AppComponent = ({
                   hasExtension,
                   firstRun,
                   isFirefox,
-                  addonUrl
+                  addonUrl,
+                  setTheme
                 }}
               />
               {hasSavedThemes && (
@@ -156,4 +159,7 @@ export const AppComponent = ({
   </Fragment>
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppComponent);

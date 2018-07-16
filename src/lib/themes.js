@@ -102,7 +102,7 @@ export const normalizeThemeColor = (data, defaultColor) =>
 export const normalizeThemeColors = (colors = {}) => {
   const out = {};
   const { colors: defaultColors } = defaultTheme;
-  Object.keys(defaultColors).forEach(name => {
+  Object.keys(colors).forEach(name => {
     const color = normalizeThemeColor(colors[name], defaultColors[name]);
     if (!colorsWithAlpha.includes(name)) {
       delete color.a;

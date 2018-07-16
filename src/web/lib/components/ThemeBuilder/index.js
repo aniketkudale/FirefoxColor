@@ -6,6 +6,7 @@ import UndoRedoButtons from "../UndoRedoButtons";
 import ThemeUrl from "../ThemeUrl";
 import ThemeSaveButton from "../ThemeSaveButton";
 import Banner from "../Banner";
+import RandomButton from "../RandomButton";
 
 import "./index.scss";
 
@@ -27,7 +28,8 @@ export const ThemeBuilder = ({
   userHasEdited,
   hasExtension,
   isFirefox,
-  addonUrl
+  addonUrl,
+  setTheme
 }) => (
   <BrowserPreview {...{ theme, size: "large" }}>
     <div className="app__theme-element-pickers">
@@ -56,6 +58,7 @@ export const ThemeBuilder = ({
     )}
     {hasExtension && (
       <div className="theme-share-save">
+        <RandomButton {...{ theme, setTheme }} />
         <ThemeUrl {...{ theme, urlEncodeTheme, clipboard }} />
         <ThemeSaveButton
           {...{
